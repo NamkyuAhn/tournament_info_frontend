@@ -1,10 +1,14 @@
 import { useState } from "react";
+import api from "../services/api";
+import { useNavigate } from "react-router-dom";
 
 function SignUpPage() {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
-    username: "",
+    name: "",
     isShopOwner: false,
   });
 
@@ -17,18 +21,28 @@ function SignUpPage() {
     });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    const payload = {
-      email: formData.email,
-      password: formData.password,
-      username: formData.username,
-      role: formData.isShopOwner ? "SHOP_OWNER" : "PLAYER",
-    };
-
-    console.log(payload);
+  const data = {
+    email: formData.email,
+    password: formData.password,
+    name: formData.name,
+    role: formData.isShopOwner ? "SHOP_OWNER" : "PLAYER",
   };
+
+  try {
+    const response = await api.post("/users/signup/", data);
+
+    console.log("Success:", response.data);
+    alert("Signup success!");
+    navigate("/login");
+    
+  } catch (error) {
+    console.error("Error:", error.response?.data);
+    alert("Signup failed!");
+  }
+};
 
   return (
     <div>
@@ -62,12 +76,12 @@ function SignUpPage() {
         <br />
 
         <div>
-          <label>Username</label>
+          <label>Name</label>
           <br />
           <input
             type="text"
-            name="username"
-            value={formData.username}
+            name="name"
+            value={formData.name}
             onChange={handleChange}
           />
         </div>
