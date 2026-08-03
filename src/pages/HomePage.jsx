@@ -78,6 +78,14 @@ function HomePage() {
           <p>Welcome, {user?.name}</p>
           <p>Money: {user?.money}</p>
 
+          <Link to="/my-tournaments">
+            <button>
+              My Tournaments
+            </button>
+          </Link>
+
+          <br />
+
           <button onClick={handleLogout}>
             Logout
           </button>
