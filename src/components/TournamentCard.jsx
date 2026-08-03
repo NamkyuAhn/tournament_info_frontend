@@ -1,12 +1,16 @@
 import { useNavigate } from "react-router-dom";
 import { formatDateTime } from "../utils/formatDateTime";
 
-function TournamentCard({ tournament }) {
+function TournamentCard({
+  tournament,
+  showImage = true,
+  path = `/tournaments/${tournament.id}`,
+}) {
   const navigate = useNavigate();
 
   return (
     <div
-      onClick={() => navigate(`/tournaments/${tournament.id}`)}
+      onClick={() => navigate(path)}
       style={{
         border: "1px solid #ccc",
         padding: "10px",
@@ -14,17 +18,23 @@ function TournamentCard({ tournament }) {
         cursor: "pointer",
       }}
     >
-      <img
-        src={`http://127.0.0.1:8000${tournament.primary_image}`}
-        alt={tournament.title}
-        width="200"
-      />
+      {showImage && tournament.primary_image && (
+        <img
+          src={`http://127.0.0.1:8000${tournament.primary_image}`}
+          alt={tournament.title}
+          width="200"
+        />
+      )}
 
       <h3>{tournament.title}</h3>
 
-      <p>Shop: {tournament.shop_name}</p>
+      <p>
+        Shop: {tournament.shop_name}
+      </p>
 
-      <p>Game: {tournament.game_type}</p>
+      <p>
+        Game: {tournament.game_type}
+      </p>
 
       <p>
         Start:{" "}
