@@ -8,6 +8,9 @@ import SignUpPage from "./pages/SignUpPage";
 import TournamentDetailPage from "./pages/TournamentDetailPage";
 import MyTournamentPage from "./pages/MyTournamentPage";
 import MyTournamentDetailPage from "./pages/MyTournamentDetailPage";
+import ShopManagePage from "./pages/ShopManagePage"
+import ShopTournamentPage from "./pages/ShopTournamentPage"
+import ShopTournamentDetailPage from "./pages/ShopTournamentDetailPage";
 
 function App() {
   return (
@@ -28,6 +31,18 @@ function App() {
           <Route
             path="/my-tournaments/:id"
             element={<MyTournamentDetailPage />}
+          />
+          <Route
+            path="/shop-manage"
+            element={<ShopManagePage />}
+          />
+          <Route
+            path="/shop-tournaments"
+            element={<ShopTournamentPage />}
+          />
+          <Route
+            path="/shop-tournaments/:id"
+            element={<ShopTournamentDetailPage />}
           />
         </Route>
       </Routes>

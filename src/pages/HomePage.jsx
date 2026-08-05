@@ -78,11 +78,19 @@ function HomePage() {
           <p>Welcome, {user?.name}</p>
           <p>Money: {user?.money}</p>
 
-          <Link to="/my-tournaments">
-            <button>
-              My Tournaments
-            </button>
-          </Link>
+          {user?.role === "SHOP_OWNER" ? (
+            <Link to="/shop-manage">
+              <button>
+                Shop Manage
+              </button>
+            </Link>
+          ) : (
+            <Link to="/my-tournaments">
+              <button>
+                My Tournaments
+              </button>
+            </Link>
+            )}
 
           <br />
 
