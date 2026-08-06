@@ -24,6 +24,17 @@ function ShopManagePage() {
           </button>
         </Link>
 
+        <Link to="/shop-tournaments/create">
+          <button
+            style={{
+              width: "100%",
+              padding: "15px",
+            }}
+          >
+            Create Tournament
+          </button>
+        </Link>
+        
         <Link to="/shop-tournaments">
           <button
             style={{

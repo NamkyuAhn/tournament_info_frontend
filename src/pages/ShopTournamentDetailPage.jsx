@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 import api from "../services/api";
 import { formatDateTime } from "../utils/formatDateTime";
@@ -8,6 +8,7 @@ import { formatDateTime } from "../utils/formatDateTime";
 function ShopTournamentDetailPage() {
   const { id } = useParams();
 
+  const navigate = useNavigate();
 
   const [tournament, setTournament] = useState(null);
 
@@ -112,6 +113,18 @@ function ShopTournamentDetailPage() {
           <h2>
             Tournament Info
           </h2>
+          <button
+            onClick={() =>
+              navigate(
+                `/shop-tournaments/${tournament.id}/edit`
+              )
+            }
+            style={{
+              marginBottom: "20px",
+            }}
+          >
+            Edit Tournament
+          </button>
 
 
           <p>

@@ -31,6 +31,7 @@ function TournamentDetailPage() {
 
         setTournament(data);
         setImages(sortedImages);
+        setCurrentImage(0);
       } catch (error) {
         console.error(error);
       }
@@ -162,6 +163,10 @@ function TournamentDetailPage() {
 
           <p>
             <strong>Status:</strong> {tournament.status}
+          </p>
+
+          <p>
+            <strong>Max Participants:</strong> {tournament.max_participants}
           </p>
 
           <p>
