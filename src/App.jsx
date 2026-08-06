@@ -11,6 +11,7 @@ import MyTournamentDetailPage from "./pages/MyTournamentDetailPage";
 import ShopManagePage from "./pages/ShopManagePage"
 import ShopTournamentPage from "./pages/ShopTournamentPage"
 import ShopTournamentDetailPage from "./pages/ShopTournamentDetailPage";
+import ShopCreateEditPage from "./pages/ShopCreateEditPage";
 
 function App() {
   return (
@@ -43,6 +44,10 @@ function App() {
           <Route
             path="/shop-tournaments/:id"
             element={<ShopTournamentDetailPage />}
+          />
+          <Route
+            path="/shop-createedit"
+            element={<ShopCreateEditPage />}
           />
         </Route>
       </Routes>

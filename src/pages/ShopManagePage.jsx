@@ -13,14 +13,14 @@ function ShopManagePage() {
           maxWidth: "300px",
         }}
       >
-        <Link to="/shop-create">
+        <Link to="/shop-createedit">
           <button
             style={{
               width: "100%",
               padding: "15px",
             }}
           >
-            Shop Create
+            Shop Create/Edit
           </button>
         </Link>
 
