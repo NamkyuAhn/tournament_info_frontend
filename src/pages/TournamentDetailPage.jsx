@@ -9,8 +9,32 @@ function TournamentDetailPage() {
   const [tournament, setTournament] = useState(null);
   const [images, setImages] = useState([]);
   const [currentImage, setCurrentImage] = useState(0);
+          
+  const handleEntryRequest = async () => {
+    try {
+      const response = await api.post(
+        `/tournaments/${id}/buyin/`,
+        {
+          type: "ENTRY",
+        }
+      );
+
+      console.log(response.data);
+
+      alert("Entry request submitted successfully.");
+    } catch (error) {
+      console.error(error);
+
+      alert(
+        error.response?.data?.detail ||
+        error.response?.data?.message ||
+        "Failed to submit entry request."
+      );
+    }
+  };
 
   useEffect(() => {
+    
     const fetchTournament = async () => {
       try {
         const response = await api.get(`/tournaments/${id}/`);
@@ -28,7 +52,6 @@ function TournamentDetailPage() {
 
           return a.id - b.id;
         });
-
         setTournament(data);
         setImages(sortedImages);
         setCurrentImage(0);
@@ -184,10 +207,25 @@ function TournamentDetailPage() {
           {["WAITING", "RUNNING", "REGI_CLOSED"].includes(
             tournament.status
           ) && (
-            <p>
-              <strong>Live Players:</strong>{" "}
-              {tournament.live_players_cache}
-            </p>
+            <>
+              <p>
+                <strong>Live Players:</strong>{" "}
+                {tournament.live_players_cache}
+              </p>
+
+              <button
+                type="button"
+                onClick={handleEntryRequest}
+                style={{
+                  marginTop: "10px",
+                  padding: "10px 20px",
+                  fontSize: "16px",
+                  cursor: "pointer",
+                }}
+              >
+                Entry
+              </button>
+            </>
           )}
         </div>
       </div>
