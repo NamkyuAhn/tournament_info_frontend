@@ -77,6 +77,61 @@ function ShopTournamentDetailPage() {
     fetchEntries(page);
   };
 
+  const handleApprove = async (entryId) => {
+  try {
+    await api.patch(
+      `/tournaments/entries/${entryId}/approve/`
+    );
+
+    await fetchEntries(entryPage);
+    await fetchTournament();
+
+  } catch (error) {
+    console.error(error);
+    alert(
+      error.response?.data?.detail ||
+      "Failed to approve entry."
+    );
+  }
+};
+
+
+  const handleReject = async (entryId) => {
+    try {
+      await api.patch(
+        `/tournaments/entries/${entryId}/reject/`
+      );
+
+      await fetchEntries(entryPage);
+      await fetchTournament();
+
+    } catch (error) {
+      console.error(error);
+      alert(
+        error.response?.data?.detail ||
+        "Failed to reject entry."
+      );
+    }
+  };
+
+
+  const handleBust = async (entryId) => {
+    try {
+      await api.patch(
+        `/tournaments/entries/${entryId}/bust/`
+      );
+
+      await fetchEntries(entryPage);
+      await fetchTournament();
+
+    } catch (error) {
+      console.error(error);
+      alert(
+        error.response?.data?.detail ||
+        "Failed to bust player."
+      );
+    }
+  };
 
 
   if (!tournament) {
@@ -321,20 +376,43 @@ function ShopTournamentDetailPage() {
 
                 <td>
 
-                  {entry.approval_status === "PENDING" && (
+                  <td>
 
-                    <>
-                      <button>
-                        Approve
-                      </button>
+                    {entry.status !== "BUSTED" && (
+                      <>
+                        {entry.approval_status === "PENDING" && (
+                          <>
+                            <button
+                              onClick={() =>
+                                handleApprove(entry.id)
+                              }
+                            >
+                              Approve
+                            </button>
 
+                            <button
+                              onClick={() =>
+                                handleReject(entry.id)
+                              }
+                            >
+                              Reject
+                            </button>
+                          </>
+                        )}
 
-                      <button>
-                        Reject
-                      </button>
-                    </>
+                        {entry.approval_status === "APPROVED" && (
+                          <button
+                            onClick={() =>
+                              handleBust(entry.id)
+                            }
+                          >
+                            Bust
+                          </button>
+                        )}
+                      </>
+                    )}
 
-                  )}
+                  </td>
 
                 </td>
 
