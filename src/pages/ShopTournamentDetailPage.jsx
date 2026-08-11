@@ -18,7 +18,9 @@ function ShopTournamentDetailPage() {
 
   const [entryTotalPages, setEntryTotalPages] = useState(0);
 
+  const [isEditingStatus, setIsEditingStatus] = useState(false);
 
+  const [selectedStatus, setSelectedStatus] = useState("");
 
   const fetchTournament = async () => {
     try {
@@ -32,8 +34,6 @@ function ShopTournamentDetailPage() {
       console.error(error);
     }
   };
-
-
 
   const fetchEntries = async (page) => {
     try {
@@ -55,15 +55,11 @@ function ShopTournamentDetailPage() {
     }
   };
 
-
-
   useEffect(() => {
     fetchTournament();
     fetchEntries(1);
 
   }, [id]);
-
-
 
   const handleEntryPageChange = (page) => {
 
@@ -76,6 +72,39 @@ function ShopTournamentDetailPage() {
 
     fetchEntries(page);
   };
+  
+  const handleStatusEdit = () => {
+  setSelectedStatus(tournament.status);
+  setIsEditingStatus(true);
+};
+
+  const handleStatusCancel = () => {
+    setIsEditingStatus(false);
+    setSelectedStatus("");
+  };
+
+  const handleStatusSave = async () => {
+    try {
+      await api.patch(
+        `/tournaments/${tournament.id}/status/`,
+        {
+          status: selectedStatus,
+        }
+      );
+
+      await fetchTournament();
+
+      setIsEditingStatus(false);
+    } catch (error) {
+      console.error(error);
+
+      alert(
+        error.response?.data?.detail ||
+        "Failed to update tournament status."
+      );
+    }
+  };
+  
 
   const handleApprove = async (entryId) => {
   try {
@@ -180,7 +209,62 @@ function ShopTournamentDetailPage() {
           >
             Edit Tournament
           </button>
+          
+          <button
+            onClick={handleStatusEdit}
+            style={{
+              marginBottom: "20px",
+              marginLeft: "10px",
+            }}
+          >
+            Edit Status
+          </button>
 
+          {isEditingStatus && (
+            <div
+              style={{
+                marginBottom: "20px",
+                display: "flex",
+                alignItems: "center",
+                gap: "10px",
+              }}
+            >
+              <select
+                value={selectedStatus}
+                onChange={(e) =>
+                  setSelectedStatus(e.target.value)
+                }
+              >
+                <option value="WAITING">
+                  WAITING
+                </option>
+
+                <option value="RUNNING">
+                  RUNNING
+                </option>
+
+                <option value="REGI_CLOSED">
+                  REGI_CLOSED
+                </option>
+
+                <option value="FINISHED">
+                  FINISHED
+                </option>
+              </select>
+
+              <button
+                onClick={handleStatusSave}
+              >
+                Save Status
+              </button>
+
+              <button
+                onClick={handleStatusCancel}
+              >
+                Cancel
+              </button>
+            </div>
+          )}
 
           <p>
             Description: {tournament.description}
@@ -375,45 +459,39 @@ function ShopTournamentDetailPage() {
 
 
                 <td>
-
-                  <td>
-
-                    {entry.status !== "BUSTED" && (
-                      <>
-                        {entry.approval_status === "PENDING" && (
-                          <>
-                            <button
-                              onClick={() =>
-                                handleApprove(entry.id)
-                              }
-                            >
-                              Approve
-                            </button>
-
-                            <button
-                              onClick={() =>
-                                handleReject(entry.id)
-                              }
-                            >
-                              Reject
-                            </button>
-                          </>
-                        )}
-
-                        {entry.approval_status === "APPROVED" && (
+                  {entry.status !== "BUSTED" && (
+                    <>
+                      {entry.approval_status === "PENDING" && (
+                        <>
                           <button
                             onClick={() =>
-                              handleBust(entry.id)
+                              handleApprove(entry.id)
                             }
                           >
-                            Bust
+                            Approve
                           </button>
-                        )}
-                      </>
-                    )}
 
-                  </td>
+                          <button
+                            onClick={() =>
+                              handleReject(entry.id)
+                            }
+                          >
+                            Reject
+                          </button>
+                        </>
+                      )}
 
+                      {entry.approval_status === "APPROVED" && (
+                        <button
+                          onClick={() =>
+                            handleBust(entry.id)
+                          }
+                        >
+                          Bust
+                        </button>
+                      )}
+                    </>
+                  )}
                 </td>
 
 
