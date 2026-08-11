@@ -28,6 +28,66 @@ function MyTournamentDetailPage() {
 
   }, [id]);
 
+  const handleReentry = async () => {
+      try {
+
+        await api.post(
+          `/tournaments/${tournament.id}/buyin/`,
+          {
+            type: "REENTRY",
+          }
+        );
+
+        alert(
+          "Reentry request submitted."
+        );
+
+        window.location.reload();
+
+      } catch (error) {
+
+        console.error(error);
+
+        alert(
+          JSON.stringify(
+            error.response?.data ||
+            "Reentry failed."
+          )
+        );
+
+      }
+    };
+
+
+  const handleAddon = async () => {
+    try {
+
+      await api.post(
+        `/tournaments/${tournament.id}/buyin/`,
+        {
+          type: "ADDON",
+        }
+      );
+
+      alert(
+        "Addon request submitted."
+      );
+
+      window.location.reload();
+
+    } catch (error) {
+
+      console.error(error);
+
+      alert(
+        JSON.stringify(
+          error.response?.data ||
+          "Addon failed."
+        )
+      );
+
+    }
+  };
 
   if (!tournament) {
     return <div>Loading...</div>;
@@ -48,7 +108,37 @@ function MyTournamentDetailPage() {
       >
         View Tournament Info
       </button>
+      
+      {tournament.game_type === "POKER" &&
+      tournament.status === "RUNNING" &&
+      tournament.entry?.status === "BUSTED" && (
 
+        <button
+          onClick={handleReentry}
+          style={{
+            marginLeft: "10px",
+          }}
+        >
+          REENTRY
+        </button>
+
+      )}
+
+
+      {tournament.game_type === "POKER" &&
+      tournament.status === "RUNNING" &&
+      tournament.entry?.status === "REGISTERED" && (
+
+        <button
+          onClick={handleAddon}
+          style={{
+            marginLeft: "10px",
+          }}
+        >
+          ADDON
+        </button>
+
+)}
 
       <hr />
 
