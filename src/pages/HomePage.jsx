@@ -90,10 +90,15 @@ function HomePage() {
                 My Tournaments
               </button>
             </Link>
+            
             )}
 
           <br />
-
+          <Link to="/money-charge">
+              <button>
+                Charge Money
+              </button>
+            </Link><br></br>
           <button onClick={handleLogout}>
             Logout
           </button>
