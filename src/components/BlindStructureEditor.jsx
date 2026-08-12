@@ -573,16 +573,6 @@ const sendData = (data) => {
       >
         + Add Level
       </button>
-      <button
-        type="button"
-        onClick={addBreak}
-        style={{
-          marginTop: "10px",
-          marginLeft: "10px",
-        }}
-      >
-        + Add Break
-      </button>
 
     </div>
 
