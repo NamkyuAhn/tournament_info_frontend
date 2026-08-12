@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import api from "../services/api";
 import { formatDateTime } from "../utils/formatDateTime";
+import BlindStructureDisplay from "../components/BlindStructureDisplay";
 
 function TournamentDetailPage() {
   const { id } = useParams();
@@ -300,38 +301,12 @@ function TournamentDetailPage() {
           </p>
 
           <h3>Blind Structure</h3>
+          <BlindStructureDisplay
+            value={
+              tournament.poker_tournament.blind_structure
+            }
+          />
 
-          {tournament.poker_tournament.blind_structure?.levels?.map(
-            (level) => (
-              <div
-                key={level.level}
-                style={{
-                  border: "1px solid #ddd",
-                  padding: "10px",
-                  marginBottom: "10px",
-                }}
-              >
-                <p>
-                  <strong>Level:</strong> {level.level}
-                </p>
-
-                <p>
-                  <strong>Small Blind:</strong>{" "}
-                  {level.small_blind.toLocaleString()}
-                </p>
-
-                <p>
-                  <strong>Big Blind:</strong>{" "}
-                  {level.big_blind.toLocaleString()}
-                </p>
-
-                <p>
-                  <strong>Duration:</strong>{" "}
-                  {level.duration_minutes} min
-                </p>
-              </div>
-            )
-          )}
         </>
       )}
     </div>

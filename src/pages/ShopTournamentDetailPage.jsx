@@ -4,6 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import api from "../services/api";
 import { formatDateTime } from "../utils/formatDateTime";
 
+import BlindStructureDisplay from "../components/BlindStructureDisplay";
 
 function ShopTournamentDetailPage() {
   const { id } = useParams();
@@ -388,8 +389,6 @@ function ShopTournamentDetailPage() {
           Entries
         </h2>
 
-
-
         <table
           style={{
             width: "100%",
@@ -505,10 +504,6 @@ function ShopTournamentDetailPage() {
 
         </table>
 
-
-
-
-
         {entryTotalPages > 0 && (
 
           <div
@@ -552,16 +547,14 @@ function ShopTournamentDetailPage() {
             >
               {">"}
             </button>
-
-
+              
           </div>
-
         )}
 
-
+        <BlindStructureDisplay
+          value={tournament.poker_tournament?.blind_structure}
+          />  
       </section>
-
-
     </div>
   );
 }
