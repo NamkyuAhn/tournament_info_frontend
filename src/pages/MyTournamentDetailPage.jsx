@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+
 import api from "../services/api";
 import { formatDateTime } from "../utils/formatDateTime";
 import BlindStructureDisplay from "../components/BlindStructureDisplay";
@@ -10,7 +11,6 @@ function MyTournamentDetailPage() {
 
   const [tournament, setTournament] = useState(null);
 
-
   useEffect(() => {
     const fetchTournament = async () => {
       try {
@@ -19,50 +19,42 @@ function MyTournamentDetailPage() {
         );
 
         setTournament(response.data);
-
       } catch (error) {
         console.error(error);
       }
     };
 
     fetchTournament();
-
   }, [id]);
 
   const handleReentry = async () => {
-      try {
+    try {
+      await api.post(
+        `/tournaments/${tournament.id}/buyin/`,
+        {
+          type: "REENTRY",
+        }
+      );
 
-        await api.post(
-          `/tournaments/${tournament.id}/buyin/`,
-          {
-            type: "REENTRY",
-          }
-        );
+      alert(
+        "Reentry request submitted."
+      );
 
-        alert(
-          "Reentry request submitted."
-        );
+      window.location.reload();
+    } catch (error) {
+      console.error(error);
 
-        window.location.reload();
-
-      } catch (error) {
-
-        console.error(error);
-
-        alert(
-          JSON.stringify(
-            error.response?.data ||
-            "Reentry failed."
-          )
-        );
-
-      }
-    };
-
+      alert(
+        JSON.stringify(
+          error.response?.data ||
+          "Reentry failed."
+        )
+      );
+    }
+  };
 
   const handleAddon = async () => {
     try {
-
       await api.post(
         `/tournaments/${tournament.id}/buyin/`,
         {
@@ -75,9 +67,7 @@ function MyTournamentDetailPage() {
       );
 
       window.location.reload();
-
     } catch (error) {
-
       console.error(error);
 
       alert(
@@ -86,7 +76,6 @@ function MyTournamentDetailPage() {
           "Addon failed."
         )
       );
-
     }
   };
 
@@ -94,57 +83,53 @@ function MyTournamentDetailPage() {
     return <div>Loading...</div>;
   }
 
-
   return (
     <div>
       <h1>
         {tournament.title}
       </h1>
 
-
       <button
         onClick={() =>
-          navigate(`/tournaments/${tournament.id}`)
+          navigate(
+            `/tournaments/${tournament.id}`
+          )
         }
       >
         View Tournament Info
       </button>
-      
-      {tournament.game_type === "POKER" &&
-      tournament.status === "RUNNING" &&
-      tournament.entry?.status === "BUSTED" && (
-
-        <button
-          onClick={handleReentry}
-          style={{
-            marginLeft: "10px",
-          }}
-        >
-          REENTRY
-        </button>
-
-      )}
-
 
       {tournament.game_type === "POKER" &&
-      tournament.status === "RUNNING" &&
-      tournament.entry?.status === "REGISTERED" && (
+        tournament.status === "RUNNING" &&
+        tournament.entry?.status === "BUSTED" && (
+          <button
+            onClick={handleReentry}
+            style={{
+              marginLeft: "10px",
+            }}
+          >
+            REENTRY
+          </button>
+        )}
 
-        <button
-          onClick={handleAddon}
-          style={{
-            marginLeft: "10px",
-          }}
-        >
-          ADDON
-        </button>
-
-)}
+      {tournament.game_type === "POKER" &&
+        tournament.status === "RUNNING" &&
+        tournament.entry?.status === "REGISTERED" && (
+          <button
+            onClick={handleAddon}
+            style={{
+              marginLeft: "10px",
+            }}
+          >
+            ADDON
+          </button>
+        )}
 
       <hr />
 
-
-      <h2>Basic Information</h2>
+      <h2>
+        Basic Information
+      </h2>
 
       <p>
         Shop: {tournament.shop_name}
@@ -159,34 +144,31 @@ function MyTournamentDetailPage() {
       </p>
 
       <p>
-        Start:
-        {" "}
-        {formatDateTime(tournament.start_time)}
+        Start:{" "}
+        {formatDateTime(
+          tournament.start_time
+        )}
       </p>
 
       <p>
-        Registration Deadline:
-        {" "}
+        Registration Deadline:{" "}
         {formatDateTime(
           tournament.registration_deadline
         )}
       </p>
 
-
       <p>
         Entry Fee: {tournament.entry_fee}
       </p>
 
-
       <p>
-        Description:
-        {" "}
+        Description:{" "}
         {tournament.description}
       </p>
 
-
-
-      <h2>Prize Structure</h2>
+      <h2>
+        Prize Structure
+      </h2>
 
       {Object.entries(
         tournament.prize_structure
@@ -196,47 +178,66 @@ function MyTournamentDetailPage() {
         </p>
       ))}
 
-
-
       {tournament.poker_tournament && (
         <>
-          <h2>Poker Information</h2>
+          <h2>
+            Poker Information
+          </h2>
 
           <p>
-            Max Entries:
-            {" "}
-            {tournament.poker_tournament.max_entries}
+            Max Entries:{" "}
+            {
+              tournament.poker_tournament
+                .max_entries
+            }
           </p>
 
           <p>
-            Max Reentries:
-            {" "}
-            {tournament.poker_tournament.max_reentries}
+            Max Reentries:{" "}
+            {
+              tournament.poker_tournament
+                .max_reentries
+            }
           </p>
 
           <p>
-            Max Addons:
-            {" "}
-            {tournament.poker_tournament.max_addons}
+            Max Addons:{" "}
+            {
+              tournament.poker_tournament
+                .max_addons
+            }
           </p>
 
           <p>
-            Starting Chips:
-            {" "}
-            {tournament.poker_tournament.starting_chips}
+            Starting Chips:{" "}
+            {
+              tournament.poker_tournament
+                .starting_chips
+            }
           </p>
 
           <p>
-            Reentry Fee:
-            {" "}
-            {tournament.poker_tournament.reentry_fee}
+            Reentry Fee:{" "}
+            {
+              tournament.poker_tournament
+                .reentry_fee
+            }
           </p>
 
           <p>
-            Addon Fee:
-            {" "}
-            {tournament.poker_tournament.addon_fee}
+            Addon Fee:{" "}
+            {
+              tournament.poker_tournament
+                .addon_fee
+            }
           </p>
+
+          <BlindStructureDisplay
+            value={
+              tournament.poker_tournament
+                .blind_structure
+            }
+          />
         </>
       )}
 
@@ -247,29 +248,24 @@ function MyTournamentDetailPage() {
           </h2>
 
           <p>
-            Approval:
-            {" "}
+            Approval:{" "}
             {tournament.entry.approval_status}
           </p>
 
           <p>
-            Entry Status:
-            {" "}
+            Entry Status:{" "}
             {tournament.entry.status}
           </p>
 
           <p>
-            Table:
-            {" "}
+            Table:{" "}
             {tournament.entry.table_number}
           </p>
 
           <p>
-            Seat:
-            {" "}
+            Seat:{" "}
             {tournament.entry.seat_number}
           </p>
-
 
           <h2>
             Buy-in History
@@ -278,11 +274,7 @@ function MyTournamentDetailPage() {
           {tournament.entry.buyin_events.map(
             (event) => (
               <p key={event.id}>
-                {event.type}
-                {" "}
-                - {event.amount}
-                {" "}
-                (
+                {event.type} - {event.amount} (
                 {formatDateTime(
                   event.created_at
                 )}
@@ -290,14 +282,8 @@ function MyTournamentDetailPage() {
               </p>
             )
           )}
-          
-          <BlindStructureDisplay
-            value={
-              tournament.poker_tournament.blind_structure
-            }></BlindStructureDisplay>
         </>
       )}
-
     </div>
   );
 }

@@ -20,7 +20,7 @@ function TournamentCard({
     >
       {showImage && tournament.primary_image && (
         <img
-          src={`http://127.0.0.1:8000${tournament.primary_image}`}
+          src={tournament.primary_image}
           alt={tournament.title}
           width="200"
         />
