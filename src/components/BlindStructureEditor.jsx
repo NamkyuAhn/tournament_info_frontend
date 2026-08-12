@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 
 
 const createLevel = (level) => ({
+  type: "LEVEL",
   level,
   big_blind: "",
   small_blind: "",
@@ -9,6 +10,10 @@ const createLevel = (level) => ({
   duration_minutes: "",
 });
 
+const createBreak = () => ({
+  type: "BREAK",
+  duration_minutes: "",
+});
 
 
 function BlindStructureEditor({
@@ -46,39 +51,43 @@ function BlindStructureEditor({
     ){
 
       setLevels(
+        value.levels.map((item) => {
 
-        value.levels.map(
-          (level)=>({
+          if (item.type === "BREAK") {
 
-            level:
-              level.level,
-
-            big_blind:
-              String(
-                level.big_blind
+            return {
+              type: "BREAK",
+              duration_minutes: String(
+                item.duration_minutes
               ),
+            };
 
-            small_blind:
-              String(
-                level.small_blind
-              ),
+          }
+
+          return {
+            type: "LEVEL",
+
+            level: item.level,
+
+            big_blind: String(
+              item.big_blind
+            ),
+
+            small_blind: String(
+              item.small_blind
+            ),
 
             ante:
-              level.ante === 0
+              item.ante === 0
                 ? ""
-                :
-                String(
-                  level.ante
-                ),
+                : String(item.ante),
 
-            duration_minutes:
-              String(
-                level.duration_minutes
-              ),
+            duration_minutes: String(
+              item.duration_minutes
+            ),
+          };
 
-          })
-        )
-
+        })
       );
 
 
@@ -89,7 +98,7 @@ function BlindStructureEditor({
 
         Array.from(
           {
-            length:10
+            length:5
           },
           (_,index)=>
             createLevel(
@@ -122,6 +131,7 @@ function BlindStructureEditor({
 
     const updatedLevels =
       levels.map(
+        
         (level,i)=>
 
           i === index
@@ -154,178 +164,130 @@ function BlindStructureEditor({
 
   };
 
-
-
-
-
-
-  const addLevel = ()=>{
-
+  const addLevel = () => {
+    const nextLevelNumber =
+      levels.filter(
+        (item) => item.type === "LEVEL"
+      ).length + 1;
 
     const updatedLevels = [
-
       ...levels,
-
-      createLevel(
-        levels.length + 1
-      )
-
+      createLevel(nextLevelNumber),
     ];
 
+    setLevels(updatedLevels);
+    sendData(updatedLevels);
+  };
 
+  const addBreak = (index) => {
+    const updatedLevels = [
+      ...levels.slice(0, index + 1),
+      createBreak(),
+      ...levels.slice(index + 1),
+    ];
 
-    setLevels(
-      updatedLevels
-    );
-
-
-    sendData(
-      updatedLevels
-    );
-
-
+    setLevels(updatedLevels);
+    sendData(updatedLevels);
   };
 
 
 
 
 
+const deleteLevel = (index) => {
 
-  const deleteLevel = (
-    index
-  )=>{
-
-
-    const filtered =
-      levels.filter(
-        (_,i)=>
-          i !== index
-      );
-
-
-
-    const updatedLevels =
-      filtered.map(
-        (item,index)=>({
-
-          ...item,
-
-          level:
-            index+1,
-
-        })
-      );
-
-
-
-    setLevels(
-      updatedLevels
+  const filtered =
+    levels.filter(
+      (_, i) => i !== index
     );
 
+  let levelNumber = 1;
 
-    sendData(
-      updatedLevels
-    );
+  const updatedLevels =
+    filtered.map((item) => {
 
+      if (item.type === "BREAK") {
+        return item;
+      }
+
+      return {
+        ...item,
+        level: levelNumber++,
+      };
+    });
+
+  setLevels(updatedLevels);
+
+  sendData(updatedLevels);
+};
+
+const sendData = (data) => {
+
+  const result = {
+
+    levels: data
+      .filter((item) => {
+
+        if (item.type === "BREAK") {
+
+          return (
+            item.duration_minutes !== ""
+          );
+
+        }
+
+        return (
+          item.big_blind !== "" &&
+          item.small_blind !== "" &&
+          item.duration_minutes !== ""
+        );
+
+      })
+      .map((item) => {
+
+        if (item.type === "BREAK") {
+
+          return {
+            type: "BREAK",
+            duration_minutes: Number(
+              item.duration_minutes
+            ),
+          };
+
+        }
+
+        return {
+
+          type: "LEVEL",
+
+          level: item.level,
+
+          big_blind: Number(
+            item.big_blind
+          ),
+
+          small_blind: Number(
+            item.small_blind
+          ),
+
+          ante:
+            item.ante === ""
+              ? 0
+              : Number(item.ante),
+
+          duration_minutes: Number(
+            item.duration_minutes
+          ),
+
+        };
+
+      }),
 
   };
 
+  onChange(result);
 
-
-
-
-
-
-  const sendData = (
-    data
-  )=>{
-
-
-    const validLevels =
-      data.filter(
-        (level)=>
-
-          level.big_blind !== "" &&
-
-          level.small_blind !== "" &&
-
-          level.duration_minutes !== ""
-
-      );
-
-
-
-    const result = {
-
-
-      levels:
-
-        validLevels.map(
-          (level)=>(
-
-            {
-
-              level:
-                level.level,
-
-
-              big_blind:
-                Number(
-                  level.big_blind
-                ),
-
-
-              small_blind:
-                Number(
-                  level.small_blind
-                ),
-
-
-              ante:
-
-                level.ante === ""
-
-                ?
-
-                0
-
-                :
-
-                Number(
-                  level.ante
-                ),
-
-
-
-              duration_minutes:
-                Number(
-                  level.duration_minutes
-                ),
-
-
-            }
-
-          )
-
-        )
-
-
-    };
-
-
-
-    onChange(
-      result
-    );
-
-
-  };
-
-
-
-
-
-
+};
 
   return (
 
@@ -366,16 +328,16 @@ function BlindStructureEditor({
             "grid",
 
           gridTemplateColumns:
-            "80px 1fr 1fr 1fr 1fr 90px",
+            "60px 0.8fr 0.8fr 0.8fr 0.9fr 150px",
 
           gap:
-            "10px",
+            "8px",
 
           alignItems:
             "center",
 
           padding:
-            "10px 0",
+            "12px 0",
 
           fontWeight:
             "bold",
@@ -417,167 +379,185 @@ function BlindStructureEditor({
 
 
 
-      {
-        levels.map(
-          (level,index)=>(
+{
+  levels.map((level,index)=>{
 
+    if(level.type === "BREAK"){
 
-            <div
-              key={index}
-              style={{
+      return (
 
-                display:
-                  "grid",
+        <div
+          key={index}
+          style={{
+            display:"grid",
+            gridTemplateColumns:"1fr 1fr 160px",
+            gap:"10px",
+            alignItems:"center",
+            padding:"12px 0",
+            background:"#f5f5f5",
+            borderBottom:"1px solid #eee",
+          }}
+        >
 
-                gridTemplateColumns:
-                  "80px 1fr 1fr 1fr 1fr 90px",
+          <strong>
+            BREAK
+          </strong>
 
-                gap:
-                  "10px",
+          <div>
 
-                alignItems:
-                  "center",
+            <input
+              type="number"
+              value={
+                level.duration_minutes
+              }
+              onChange={(e)=>
+                updateLevel(
+                  index,
+                  "duration_minutes",
+                  e.target.value
+                )
+              }
+            />
 
-                padding:
-                  "12px 0",
+            <span>
+              mins
+            </span>
 
-                borderBottom:
-                  "1px solid #eee",
+          </div>
 
-              }}
-            >
+          <button
+            type="button"
+            onClick={()=>
+              deleteLevel(index)
+            }
+          >
+            Delete
+          </button>
 
+        </div>
 
+      );
 
-              <span>
-                {level.level}
-              </span>
+    }
 
+    return (
 
+      <div
+        key={index}
+        style={{
+          display:"grid",
+          gridTemplateColumns:
+            "60px 0.8fr 0.8fr 0.8fr 0.9fr 150px",
+          gap:"10px",
+          alignItems:"center",
+          padding:"12px 0",
+          borderBottom:"1px solid #eee",
+        }}
+      >
 
+        <span>
+          {level.level}
+        </span>
 
-              <input
-                type="number"
-                value={
-                  level.big_blind
-                }
-                placeholder="BB"
-                onChange={
-                  (e)=>
-                    updateLevel(
-                      index,
-                      "big_blind",
-                      e.target.value
-                    )
-                }
-              />
+        <input
+          type="number"
+          value={level.big_blind}
+          placeholder="BB"
+          onChange={(e)=>
+            updateLevel(
+              index,
+              "big_blind",
+              e.target.value
+            )
+          }
+        />
 
+        <input
+          type="number"
+          value={level.small_blind}
+          placeholder="SB"
+          onChange={(e)=>
+            updateLevel(
+              index,
+              "small_blind",
+              e.target.value
+            )
+          }
+        />
 
+        <input
+          type="number"
+          value={level.ante}
+          placeholder="Ante"
+          onChange={(e)=>
+            updateLevel(
+              index,
+              "ante",
+              e.target.value
+            )
+          }
+        />
 
+        <div
+          style={{
+            display:"flex",
+            gap:"5px",
+            alignItems:"center",
+          }}
+        >
 
-              <input
-                type="number"
-                value={
-                  level.small_blind
-                }
-                placeholder="SB"
-                onChange={
-                  (e)=>
-                    updateLevel(
-                      index,
-                      "small_blind",
-                      e.target.value
-                    )
-                }
-              />
+          <input
+            type="number"
+            value={
+              level.duration_minutes
+            }
+            placeholder="Time"
+            onChange={(e)=>
+              updateLevel(
+                index,
+                "duration_minutes",
+                e.target.value
+              )
+            }
+          />
 
+          <span>
+            mins
+          </span>
 
+        </div>
 
+      <div
+        style={{
+          display: "flex",
+          gap: "5px",
+          alignItems: "center",
+          whiteSpace: "nowrap",
+        }}
+      >
+        <button
+          type="button"
+          onClick={()=>
+            deleteLevel(index)
+          }
+        >
+          Delete
+        </button>
 
-              <input
-                type="number"
-                value={
-                  level.ante
-                }
-                placeholder="Ante"
-                onChange={
-                  (e)=>
-                    updateLevel(
-                      index,
-                      "ante",
-                      e.target.value
-                    )
-                }
-              />
+        <button
+          type="button"
+          onClick={() =>
+            addBreak(index)
+          }
+        >
+          + Break
+        </button>
+      </div>
+      </div>
+    );
 
-
-
-
-              <div
-                style={{
-
-                  display:
-                    "flex",
-
-                  alignItems:
-                    "center",
-
-                  gap:
-                    "5px",
-
-                }}
-              >
-
-                <input
-                  type="number"
-                  value={
-                    level.duration_minutes
-                  }
-                  placeholder="Time"
-                  onChange={
-                    (e)=>
-                      updateLevel(
-                        index,
-                        "duration_minutes",
-                        e.target.value
-                      )
-                  }
-                />
-
-                <span>
-                  mins
-                </span>
-
-
-              </div>
-
-
-
-
-
-              <button
-                type="button"
-                onClick={()=>
-                  deleteLevel(
-                    index
-                  )
-                }
-              >
-                Delete
-              </button>
-
-
-
-            </div>
-
-
-          )
-        )
-      }
-
-
-
-
+  })
+}
 
       <button
         type="button"
@@ -591,13 +571,18 @@ function BlindStructureEditor({
 
         }}
       >
-
         + Add Level
-
       </button>
-
-
-
+      <button
+        type="button"
+        onClick={addBreak}
+        style={{
+          marginTop: "10px",
+          marginLeft: "10px",
+        }}
+      >
+        + Add Break
+      </button>
 
     </div>
 
