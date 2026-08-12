@@ -187,7 +187,10 @@ function TournamentEditPage() {
 
           const data =
             response.data;
-
+          console.log(
+          "EDIT PRIZE:",
+          data.prize_structure
+        );
 
 
 
@@ -237,9 +240,19 @@ function TournamentEditPage() {
 
 
 
+          let prizeData =
+            data.prize_structure;
+
+          if (
+            typeof prizeData === "string"
+          ) {
+            prizeData =
+              JSON.parse(prizeData);
+          }
+
           setPrizeStructure(
             convertPrizeToEditor(
-              data.prize_structure
+              prizeData
             )
           );
 
@@ -490,33 +503,10 @@ function TournamentEditPage() {
     return result;
 
   };
-
-
-
-
-
-
-
-  const convertUrlToFile = async(image)=>{
-
-    const response =
-        await fetch(image.image);
-
-
-    const blob =
-        await response.blob();
-
-
-    return new File(
-        [blob],
-        image.image.split("/").pop(),
-        {
-        type: blob.type,
-        }
-    );
-
-    };
-
+  console.log(
+  "SAVE PRIZE:",
+  convertPrizeToBackend()
+);
   const handleSubmit = async(e)=>{
 
 
@@ -611,84 +601,61 @@ function TournamentEditPage() {
 
 
 
-    if(images.changed){
+    if (images.changed) {
 
+  
+  const newImages = [];
 
-  const uploadImages = [];
+  
+  if (images.primary instanceof File) {
+    newImages.push(images.primary);
+  }
 
+ 
+  for (const image of images.others) {
 
-  if(images.primary){
-
-    if(images.primary instanceof File){
-
-      uploadImages.push(
-        images.primary
-      );
-
-    }
-
-    else if(images.primary.image){
-
-      uploadImages.push(
-        await convertUrlToFile(
-          images.primary
-        )
-      );
-
+    if (image instanceof File) {
+      newImages.push(image);
     }
 
   }
 
+  newImages.forEach((image) => {
+
+    formData.append(
+      "images",
+      image
+    );
+
+  });
+
+  const existingImageIds = [
+
+    ...(images.primary?.id
+      ? [images.primary.id]
+      : []),
+
+    ...images.others
+      .filter(
+        (image) =>
+          image?.id
+      )
+      .map(
+        (image) =>
+          image.id
+      ),
+
+  ];
 
 
-
-  for(
-    const image of images.others
-  ){
-
-    if(image instanceof File){
-
-      uploadImages.push(
-        image
-      );
-
-    }
-
-    else if(image.image){
-
-      uploadImages.push(
-        await convertUrlToFile(
-          image
-        )
-      );
-
-    }
-
-  }
-
-
-
-
-
-  uploadImages.forEach(
-    image=>{
-
-      formData.append(
-        "images",
-        image
-      );
-
-    }
+  formData.append(
+    "existing_image_ids",
+    JSON.stringify(
+      existingImageIds
+    )
   );
 
-
 }
-
-
-
-
-
-
     try{
 
 

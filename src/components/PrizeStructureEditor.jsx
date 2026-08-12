@@ -96,7 +96,8 @@ function PrizeStructureEditor({
         value
       )
     );
-
+    console.log("PRIZE VALUE:", value);
+    console.log("PRIZE CONVERTED:", convertObjectToArray(value)); 
 
 
 
