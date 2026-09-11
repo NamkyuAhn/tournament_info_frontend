@@ -22,27 +22,26 @@ function SignUpPage() {
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  const data = {
-    email: formData.email,
-    password: formData.password,
-    name: formData.name,
-    role: formData.isShopOwner ? "SHOP_OWNER" : "PLAYER",
+    const data = {
+      email: formData.email,
+      password: formData.password,
+      name: formData.name,
+      role: formData.isShopOwner ? "SHOP_OWNER" : "PLAYER",
+    };
+
+    try {
+      const response = await api.post("/users/signup/", data);
+
+      console.log("Success:", response.data);
+      alert("Signup success!");
+      navigate("/login");
+    } catch (error) {
+      console.error("Error:", error.response?.data);
+      alert("Signup failed!");
+    }
   };
-
-  try {
-    const response = await api.post("/users/signup/", data);
-
-    console.log("Success:", response.data);
-    alert("Signup success!");
-    navigate("/login");
-    
-  } catch (error) {
-    console.error("Error:", error.response?.data);
-    alert("Signup failed!");
-  }
-};
 
   return (
     <div>

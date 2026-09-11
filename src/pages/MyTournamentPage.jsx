@@ -8,34 +8,27 @@ function MyTournamentPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
 
-
   const fetchTournaments = async (page) => {
     try {
       const response = await api.get(
-        `/tournaments/my-tournaments/?page=${page}`
+        `/tournaments/my-tournaments/?page=${page}`,
       );
 
       setTournaments(response.data.results);
 
-      setTotalPages(
-        Math.ceil(response.data.count / 6)
-      );
-
+      setTotalPages(Math.ceil(response.data.count / 6));
     } catch (error) {
       console.error(error);
     }
   };
 
-
   useEffect(() => {
     fetchTournaments(currentPage);
   }, [currentPage]);
 
-
   return (
     <div>
       <h1>My Tournaments</h1>
-
 
       <div
         style={{
@@ -54,13 +47,11 @@ function MyTournamentPage() {
         ))}
       </div>
 
-
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}
         onPageChange={setCurrentPage}
       />
-
     </div>
   );
 }

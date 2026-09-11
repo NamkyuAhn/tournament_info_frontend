@@ -1,10 +1,6 @@
 function BlindStructureDisplay({ value }) {
   if (!value?.levels || value.levels.length === 0) {
-    return (
-      <div>
-        No blind structure available.
-      </div>
-    );
+    return <div>No blind structure available.</div>;
   }
 
   return (
@@ -17,15 +13,12 @@ function BlindStructureDisplay({ value }) {
         marginBottom: "20px",
       }}
     >
-      <h2>
-        Blind Structure
-      </h2>
+      <h2>Blind Structure</h2>
 
       <div
         style={{
           display: "grid",
-          gridTemplateColumns:
-            "80px 1fr 1fr 1fr 120px",
+          gridTemplateColumns: "80px 1fr 1fr 1fr 120px",
           gap: "10px",
           alignItems: "center",
           padding: "10px 0",
@@ -63,33 +56,22 @@ function BlindStructureDisplay({ value }) {
             key={index}
             style={{
               display: "grid",
-              gridTemplateColumns:
-                "80px 1fr 1fr 1fr 120px",
+              gridTemplateColumns: "80px 1fr 1fr 1fr 120px",
               gap: "10px",
               alignItems: "center",
               padding: "12px 0",
               borderBottom: "1px solid #eee",
             }}
           >
-            <span>
-              {item.level}
-            </span>
+            <span>{item.level}</span>
 
-            <span>
-              {item.big_blind}
-            </span>
+            <span>{item.big_blind}</span>
 
-            <span>
-              {item.small_blind}
-            </span>
+            <span>{item.small_blind}</span>
 
-            <span>
-              {item.ante}
-            </span>
+            <span>{item.ante}</span>
 
-            <span>
-              {item.duration_minutes} mins
-            </span>
+            <span>{item.duration_minutes} mins</span>
           </div>
         );
       })}

@@ -7,10 +7,7 @@ const api = axios.create({
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("accessToken");
 
-  const publicUrls = [
-    "/users/login/",
-    "/users/signup/",
-  ];
+  const publicUrls = ["/users/login/", "/users/signup/"];
 
   if (token && !publicUrls.includes(config.url)) {
     config.headers.Authorization = `Bearer ${token}`;
@@ -18,6 +15,5 @@ api.interceptors.request.use((config) => {
 
   return config;
 });
-
 
 export default api;

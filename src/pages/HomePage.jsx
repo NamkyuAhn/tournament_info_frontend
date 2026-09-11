@@ -17,30 +17,22 @@ function HomePage() {
     try {
       const response = await api.get("/users/me/");
       setUser(response.data);
-
     } catch (error) {
       console.error(error);
     }
   };
-
 
   const fetchTournaments = async (page) => {
     try {
-      const response = await api.get(
-        `/tournaments/?page=${page}`
-      );
+      const response = await api.get(`/tournaments/?page=${page}`);
 
       setTournaments(response.data.results);
 
-      setTotalPages(
-        Math.ceil(response.data.count / 6)
-      );
-
+      setTotalPages(Math.ceil(response.data.count / 6));
     } catch (error) {
       console.error(error);
     }
   };
-
 
   useEffect(() => {
     fetchTournaments(1);
@@ -48,15 +40,12 @@ function HomePage() {
     if (token) {
       fetchUser();
     }
-
   }, [token]);
-
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
     fetchTournaments(page);
   };
-
 
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
@@ -67,11 +56,9 @@ function HomePage() {
     window.location.reload();
   };
 
-
   return (
     <div>
       <h1>Tournament Info</h1>
-
 
       {token ? (
         <>
@@ -80,46 +67,32 @@ function HomePage() {
 
           {user?.role === "SHOP_OWNER" ? (
             <Link to="/shop-manage">
-              <button>
-                Shop Manage
-              </button>
+              <button>Shop Manage</button>
             </Link>
           ) : (
             <Link to="/my-tournaments">
-              <button>
-                My Tournaments
-              </button>
+              <button>My Tournaments</button>
             </Link>
-            
-            )}
+          )}
 
           <br />
           <Link to="/money-charge">
-              <button>
-                Charge Money
-              </button>
-            </Link><br></br>
-          <button onClick={handleLogout}>
-            Logout
-          </button>
+            <button>Charge Money</button>
+          </Link>
+          <br></br>
+          <button onClick={handleLogout}>Logout</button>
         </>
       ) : (
         <>
-          <Link to="/login">
-            Login
-          </Link>
+          <Link to="/login">Login</Link>
 
           <br />
 
-          <Link to="/signup">
-            Sign Up
-          </Link>
+          <Link to="/signup">Sign Up</Link>
         </>
       )}
 
-
       <h2>Tournaments</h2>
-
 
       <div
         style={{
@@ -129,20 +102,15 @@ function HomePage() {
         }}
       >
         {tournaments.map((tournament) => (
-          <TournamentCard
-            key={tournament.id}
-            tournament={tournament}
-          />
+          <TournamentCard key={tournament.id} tournament={tournament} />
         ))}
       </div>
-
 
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}
         onPageChange={handlePageChange}
       />
-
     </div>
   );
 }

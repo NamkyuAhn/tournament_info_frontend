@@ -1,21 +1,10 @@
-function PokerTournamentForm({
-  value,
-  onChange,
-}) {
-
-
-  const handleChange = (
-    field,
-    newValue
-  ) => {
-
+function PokerTournamentForm({ value, onChange }) {
+  const handleChange = (field, newValue) => {
     onChange({
       ...value,
       [field]: newValue,
     });
-
   };
-
 
   const fields = [
     {
@@ -58,8 +47,6 @@ function PokerTournamentForm({
     },
   ];
 
-
-
   return (
     <div
       style={{
@@ -70,69 +57,41 @@ function PokerTournamentForm({
         marginBottom: "20px",
       }}
     >
-
-      <h2>
-        Poker Information
-      </h2>
-
+      <h2>Poker Information</h2>
 
       <div
         style={{
           display: "grid",
-          gridTemplateColumns:
-            "repeat(3, 1fr)",
+          gridTemplateColumns: "repeat(3, 1fr)",
           gap: "20px",
           marginTop: "20px",
         }}
       >
+        {fields.map((field) => (
+          <div
+            key={field.key}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "8px",
+            }}
+          >
+            <label>{field.label}</label>
 
-        {
-          fields.map((field) => (
-
-            <div
-              key={field.key}
+            <input
+              type="number"
+              value={value[field.key]}
+              onChange={(e) => handleChange(field.key, e.target.value)}
               style={{
-                display: "flex",
-                flexDirection:
-                  "column",
-                gap: "8px",
+                padding: "10px",
+                fontSize: "15px",
+                width: "100%",
+                boxSizing: "border-box",
               }}
-            >
-
-              <label>
-                {field.label}
-              </label>
-
-
-              <input
-                type="number"
-                value={
-                  value[field.key]
-                }
-                onChange={(e) =>
-                  handleChange(
-                    field.key,
-                    e.target.value
-                  )
-                }
-                style={{
-                  padding: "10px",
-                  fontSize: "15px",
-                  width: "100%",
-                  boxSizing:
-                    "border-box",
-                }}
-              />
-
-            </div>
-
-          ))
-        }
-
-
+            />
+          </div>
+        ))}
       </div>
-
-
     </div>
   );
 }

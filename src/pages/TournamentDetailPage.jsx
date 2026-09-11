@@ -10,15 +10,12 @@ function TournamentDetailPage() {
   const [tournament, setTournament] = useState(null);
   const [images, setImages] = useState([]);
   const [currentImage, setCurrentImage] = useState(0);
-          
+
   const handleEntryRequest = async () => {
     try {
-      const response = await api.post(
-        `/tournaments/${id}/buyin/`,
-        {
-          type: "ENTRY",
-        }
-      );
+      const response = await api.post(`/tournaments/${id}/buyin/`, {
+        type: "ENTRY",
+      });
 
       console.log(response.data);
 
@@ -28,14 +25,13 @@ function TournamentDetailPage() {
 
       alert(
         error.response?.data?.detail ||
-        error.response?.data?.message ||
-        "Failed to submit entry request."
+          error.response?.data?.message ||
+          "Failed to submit entry request.",
       );
     }
   };
 
   useEffect(() => {
-    
     const fetchTournament = async () => {
       try {
         const response = await api.get(`/tournaments/${id}/`);
@@ -98,7 +94,7 @@ function TournamentDetailPage() {
                       setCurrentImage(
                         currentImage === 0
                           ? images.length - 1
-                          : currentImage - 1
+                          : currentImage - 1,
                       )
                     }
                     style={{
@@ -128,7 +124,7 @@ function TournamentDetailPage() {
                       setCurrentImage(
                         currentImage === images.length - 1
                           ? 0
-                          : currentImage + 1
+                          : currentImage + 1,
                       )
                     }
                     style={{
@@ -161,9 +157,7 @@ function TournamentDetailPage() {
                         height: "12px",
                         borderRadius: "50%",
                         backgroundColor:
-                          currentImage === index
-                            ? "black"
-                            : "#ccc",
+                          currentImage === index ? "black" : "#ccc",
                         cursor: "pointer",
                       }}
                     />
@@ -194,24 +188,20 @@ function TournamentDetailPage() {
           </p>
 
           <p>
-            <strong>Start Time:</strong>{" "}
-            {formatDateTime(tournament.start_time)}
+            <strong>Start Time:</strong> {formatDateTime(tournament.start_time)}
           </p>
 
           <p>
             <strong>Registration Deadline:</strong>{" "}
-            {formatDateTime(
-                tournament.registration_deadline
-                )}
+            {formatDateTime(tournament.registration_deadline)}
           </p>
 
           {["WAITING", "RUNNING", "REGI_CLOSED"].includes(
-            tournament.status
+            tournament.status,
           ) && (
             <>
               <p>
-                <strong>Live Players:</strong>{" "}
-                {tournament.live_players_cache}
+                <strong>Live Players:</strong> {tournament.live_players_cache}
               </p>
 
               <button
@@ -241,13 +231,11 @@ function TournamentDetailPage() {
 
       <h2>Prize Structure</h2>
 
-      {Object.entries(tournament.prize_structure).map(
-        ([rank, prize]) => (
-          <p key={rank}>
-            {rank} Place: {prize.toLocaleString()}
-          </p>
-        )
-      )}
+      {Object.entries(tournament.prize_structure).map(([rank, prize]) => (
+        <p key={rank}>
+          {rank} Place: {prize.toLocaleString()}
+        </p>
+      ))}
 
       {tournament.poker_tournament && (
         <>
@@ -302,11 +290,8 @@ function TournamentDetailPage() {
 
           <h3>Blind Structure</h3>
           <BlindStructureDisplay
-            value={
-              tournament.poker_tournament.blind_structure
-            }
+            value={tournament.poker_tournament.blind_structure}
           />
-
         </>
       )}
     </div>
