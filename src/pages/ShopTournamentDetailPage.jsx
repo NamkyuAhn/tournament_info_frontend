@@ -25,12 +25,9 @@ function ShopTournamentDetailPage() {
 
   const fetchTournament = async () => {
     try {
-      const response = await api.get(
-        `/tournaments/my-shop-tournaments/${id}/`
-      );
+      const response = await api.get(`/tournaments/my-shop-tournaments/${id}/`);
 
       setTournament(response.data);
-
     } catch (error) {
       console.error(error);
     }
@@ -39,18 +36,12 @@ function ShopTournamentDetailPage() {
   const fetchEntries = async (page) => {
     try {
       const response = await api.get(
-        `/tournaments/my-shop-tournaments/${id}/entries/?page=${page}`
+        `/tournaments/my-shop-tournaments/${id}/entries/?page=${page}`,
       );
-
 
       setEntries(response.data.results);
 
-
-      setEntryTotalPages(
-        Math.ceil(response.data.count / 10)
-      );
-
-
+      setEntryTotalPages(Math.ceil(response.data.count / 10));
     } catch (error) {
       console.error(error);
     }
@@ -59,25 +50,22 @@ function ShopTournamentDetailPage() {
   useEffect(() => {
     fetchTournament();
     fetchEntries(1);
-
   }, [id]);
 
   const handleEntryPageChange = (page) => {
-
     if (page < 1 || page > entryTotalPages) {
       return;
     }
-
 
     setEntryPage(page);
 
     fetchEntries(page);
   };
-  
+
   const handleStatusEdit = () => {
-  setSelectedStatus(tournament.status);
-  setIsEditingStatus(true);
-};
+    setSelectedStatus(tournament.status);
+    setIsEditingStatus(true);
+  };
 
   const handleStatusCancel = () => {
     setIsEditingStatus(false);
@@ -86,12 +74,9 @@ function ShopTournamentDetailPage() {
 
   const handleStatusSave = async () => {
     try {
-      await api.patch(
-        `/tournaments/${tournament.id}/status/`,
-        {
-          status: selectedStatus,
-        }
-      );
+      await api.patch(`/tournaments/${tournament.id}/status/`, {
+        status: selectedStatus,
+      });
 
       await fetchTournament();
 
@@ -100,88 +85,54 @@ function ShopTournamentDetailPage() {
       console.error(error);
 
       alert(
-        error.response?.data?.detail ||
-        "Failed to update tournament status."
+        error.response?.data?.detail || "Failed to update tournament status.",
       );
     }
   };
-  
 
   const handleApprove = async (entryId) => {
-  try {
-    await api.patch(
-      `/tournaments/entries/${entryId}/approve/`
-    );
+    try {
+      await api.patch(`/tournaments/entries/${entryId}/approve/`);
 
-    await fetchEntries(entryPage);
-    await fetchTournament();
-
-  } catch (error) {
-    console.error(error);
-    alert(
-      error.response?.data?.detail ||
-      "Failed to approve entry."
-    );
-  }
-};
-
+      await fetchEntries(entryPage);
+      await fetchTournament();
+    } catch (error) {
+      console.error(error);
+      alert(error.response?.data?.detail || "Failed to approve entry.");
+    }
+  };
 
   const handleReject = async (entryId) => {
     try {
-      await api.patch(
-        `/tournaments/entries/${entryId}/reject/`
-      );
+      await api.patch(`/tournaments/entries/${entryId}/reject/`);
 
       await fetchEntries(entryPage);
       await fetchTournament();
-
     } catch (error) {
       console.error(error);
-      alert(
-        error.response?.data?.detail ||
-        "Failed to reject entry."
-      );
+      alert(error.response?.data?.detail || "Failed to reject entry.");
     }
   };
-
 
   const handleBust = async (entryId) => {
     try {
-      await api.patch(
-        `/tournaments/entries/${entryId}/bust/`
-      );
+      await api.patch(`/tournaments/entries/${entryId}/bust/`);
 
       await fetchEntries(entryPage);
       await fetchTournament();
-
     } catch (error) {
       console.error(error);
-      alert(
-        error.response?.data?.detail ||
-        "Failed to bust player."
-      );
+      alert(error.response?.data?.detail || "Failed to bust player.");
     }
   };
 
-
   if (!tournament) {
-    return (
-      <div>
-        Loading...
-      </div>
-    );
+    return <div>Loading...</div>;
   }
-
-
 
   return (
     <div>
-
-      <h1>
-        {tournament.title}
-      </h1>
-
-
+      <h1>{tournament.title}</h1>
 
       <div
         style={{
@@ -191,26 +142,17 @@ function ShopTournamentDetailPage() {
           marginBottom: "30px",
         }}
       >
-
-
         <section>
-
-          <h2>
-            Tournament Info
-          </h2>
+          <h2>Tournament Info</h2>
           <button
-            onClick={() =>
-              navigate(
-                `/shop-tournaments/${tournament.id}/edit`
-              )
-            }
+            onClick={() => navigate(`/shop-tournaments/${tournament.id}/edit`)}
             style={{
               marginBottom: "20px",
             }}
           >
             Edit Tournament
           </button>
-          
+
           <button
             onClick={handleStatusEdit}
             style={{
@@ -232,162 +174,69 @@ function ShopTournamentDetailPage() {
             >
               <select
                 value={selectedStatus}
-                onChange={(e) =>
-                  setSelectedStatus(e.target.value)
-                }
+                onChange={(e) => setSelectedStatus(e.target.value)}
               >
-                <option value="WAITING">
-                  WAITING
-                </option>
+                <option value="WAITING">WAITING</option>
 
-                <option value="RUNNING">
-                  RUNNING
-                </option>
+                <option value="RUNNING">RUNNING</option>
 
-                <option value="REGI_CLOSED">
-                  REGI_CLOSED
-                </option>
+                <option value="REGI_CLOSED">REGI_CLOSED</option>
 
-                <option value="FINISHED">
-                  FINISHED
-                </option>
+                <option value="FINISHED">FINISHED</option>
               </select>
 
-              <button
-                onClick={handleStatusSave}
-              >
-                Save Status
-              </button>
+              <button onClick={handleStatusSave}>Save Status</button>
 
-              <button
-                onClick={handleStatusCancel}
-              >
-                Cancel
-              </button>
+              <button onClick={handleStatusCancel}>Cancel</button>
             </div>
           )}
 
-          <p>
-            Description: {tournament.description}
-          </p>
+          <p>Description: {tournament.description}</p>
 
+          <p>Game: {tournament.game_type}</p>
 
-          <p>
-            Game: {tournament.game_type}
-          </p>
+          <p>Status: {tournament.status}</p>
 
-
-          <p>
-            Status: {tournament.status}
-          </p>
-
-
-          <p>
-            Start Time:{" "}
-            {formatDateTime(
-              tournament.start_time
-            )}
-          </p>
-
+          <p>Start Time: {formatDateTime(tournament.start_time)}</p>
 
           <p>
             Registration Deadline:{" "}
-            {formatDateTime(
-              tournament.registration_deadline
-            )}
+            {formatDateTime(tournament.registration_deadline)}
           </p>
 
+          <p>Entry Fee: {tournament.entry_fee}</p>
 
-          <p>
-            Entry Fee: {tournament.entry_fee}
-          </p>
-
-
-          <p>
-            Live Players:{" "}
-            {tournament.live_players_cache}
-          </p>
-
-
+          <p>Live Players: {tournament.live_players_cache}</p>
         </section>
 
-
-
-
-
         {tournament.poker_tournament && (
-
           <section>
+            <h2>Poker Information</h2>
 
-            <h2>
-              Poker Information
-            </h2>
+            <p>Max Entries: {tournament.poker_tournament.max_entries}</p>
 
+            <p>Max Reentries: {tournament.poker_tournament.max_reentries}</p>
 
-            <p>
-              Max Entries:{" "}
-              {
-                tournament.poker_tournament.max_entries
-              }
-            </p>
-
+            <p>Max Addons: {tournament.poker_tournament.max_addons}</p>
 
             <p>
-              Max Reentries:{" "}
-              {
-                tournament.poker_tournament.max_reentries
-              }
+              Total Entries: {tournament.poker_tournament.total_entries_cache}
             </p>
-
-
-            <p>
-              Max Addons:{" "}
-              {
-                tournament.poker_tournament.max_addons
-              }
-            </p>
-
-
-            <p>
-              Total Entries:{" "}
-              {
-                tournament.poker_tournament.total_entries_cache
-              }
-            </p>
-
 
             <p>
               Total Reentries:{" "}
-              {
-                tournament.poker_tournament.total_reentries_cache
-              }
+              {tournament.poker_tournament.total_reentries_cache}
             </p>
-
 
             <p>
-              Total Addons:{" "}
-              {
-                tournament.poker_tournament.total_addons_cache
-              }
+              Total Addons: {tournament.poker_tournament.total_addons_cache}
             </p>
-
-
           </section>
-
         )}
-
-
       </div>
 
-
-
-
-
       <section>
-
-        <h2>
-          Entries
-        </h2>
+        <h2>Entries</h2>
 
         <table
           style={{
@@ -395,117 +244,65 @@ function ShopTournamentDetailPage() {
             borderCollapse: "collapse",
           }}
         >
-
           <thead>
-
             <tr>
+              <th>Player</th>
 
-              <th>
-                Player
-              </th>
+              <th>Status</th>
 
-              <th>
-                Status
-              </th>
+              <th>Approval Status</th>
 
-              <th>
-                Approval Status
-              </th>
+              <th>Buy In Type</th>
 
-              <th>
-                Buy In Type
-              </th>
-
-              <th>
-                Action
-              </th>
-
+              <th>Action</th>
             </tr>
-
           </thead>
 
-
-
           <tbody>
-
             {entries.map((entry) => (
-
               <tr
                 key={entry.id}
                 style={{
                   textAlign: "center",
                 }}
               >
+                <td>{entry.player_email}</td>
 
-                <td>
-                  {entry.player_email}
-                </td>
+                <td>{entry.status}</td>
 
+                <td>{entry.approval_status}</td>
 
-                <td>
-                  {entry.status}
-                </td>
-
-
-                <td>
-                  {entry.approval_status}
-                </td>
-
-
-                <td>
-                  {entry.buy_in_type}
-                </td>
-
+                <td>{entry.buy_in_type}</td>
 
                 <td>
                   {entry.status !== "BUSTED" && (
                     <>
                       {entry.approval_status === "PENDING" && (
                         <>
-                          <button
-                            onClick={() =>
-                              handleApprove(entry.id)
-                            }
-                          >
+                          <button onClick={() => handleApprove(entry.id)}>
                             Approve
                           </button>
 
-                          <button
-                            onClick={() =>
-                              handleReject(entry.id)
-                            }
-                          >
+                          <button onClick={() => handleReject(entry.id)}>
                             Reject
                           </button>
                         </>
                       )}
 
                       {entry.approval_status === "APPROVED" && (
-                        <button
-                          onClick={() =>
-                            handleBust(entry.id)
-                          }
-                        >
+                        <button onClick={() => handleBust(entry.id)}>
                           Bust
                         </button>
                       )}
                     </>
                   )}
                 </td>
-
-
               </tr>
-
             ))}
-
-
           </tbody>
-
-
         </table>
 
         {entryTotalPages > 0 && (
-
           <div
             style={{
               display: "flex",
@@ -515,49 +312,32 @@ function ShopTournamentDetailPage() {
               marginTop: "20px",
             }}
           >
-
             <button
               disabled={entryPage === 1}
-              onClick={() =>
-                handleEntryPageChange(
-                  entryPage - 1
-                )
-              }
+              onClick={() => handleEntryPageChange(entryPage - 1)}
             >
               {"<"}
             </button>
-
-
 
             <span>
               {entryPage} / {entryTotalPages}
             </span>
 
-
-
             <button
-              disabled={
-                entryPage === entryTotalPages
-              }
-              onClick={() =>
-                handleEntryPageChange(
-                  entryPage + 1
-                )
-              }
+              disabled={entryPage === entryTotalPages}
+              onClick={() => handleEntryPageChange(entryPage + 1)}
             >
               {">"}
             </button>
-              
           </div>
         )}
 
         <BlindStructureDisplay
           value={tournament.poker_tournament?.blind_structure}
-          />  
+        />
       </section>
     </div>
   );
 }
-
 
 export default ShopTournamentDetailPage;

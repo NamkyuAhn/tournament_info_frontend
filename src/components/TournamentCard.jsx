@@ -28,18 +28,11 @@ function TournamentCard({
 
       <h3>{tournament.title}</h3>
 
-      <p>
-        Shop: {tournament.shop_name}
-      </p>
+      <p>Shop: {tournament.shop_name}</p>
 
-      <p>
-        Game: {tournament.game_type}
-      </p>
+      <p>Game: {tournament.game_type}</p>
 
-      <p>
-        Start:{" "}
-        {formatDateTime(tournament.start_time)}
-      </p>
+      <p>Start: {formatDateTime(tournament.start_time)}</p>
     </div>
   );
 }

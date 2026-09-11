@@ -2,7 +2,6 @@ import { useState } from "react";
 import api from "../services/api";
 import { useNavigate } from "react-router-dom";
 
-
 function LoginPage() {
   const navigate = useNavigate();
 
@@ -35,17 +34,16 @@ function LoginPage() {
       localStorage.setItem("refreshToken", refresh);
 
       alert("Login success!");
-      
+
       navigate("/");
-
     } catch (error) {
-        console.error(error);
+      console.error(error);
 
-        if (error.response?.status === 401) {
-            alert("Invalid email or password");
-        } else {
-            alert("Something went wrong");
-        }
+      if (error.response?.status === 401) {
+        alert("Invalid email or password");
+      } else {
+        alert("Something went wrong");
+      }
     }
   };
 
@@ -80,9 +78,7 @@ function LoginPage() {
 
         <br />
 
-        <button type="submit">
-          Login
-        </button>
+        <button type="submit">Login</button>
       </form>
     </div>
   );

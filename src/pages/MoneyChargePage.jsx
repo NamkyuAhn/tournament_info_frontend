@@ -25,10 +25,7 @@ function MoneyChargePage() {
     } catch (error) {
       console.error(error);
 
-      setError(
-        error.response?.data?.detail ||
-        "Failed to charge money."
-      );
+      setError(error.response?.data?.detail || "Failed to charge money.");
     }
   };
 
@@ -36,9 +33,7 @@ function MoneyChargePage() {
     <div>
       <h1>Money Charge</h1>
 
-      <p>
-        Enter the amount you want to charge.
-      </p>
+      <p>Enter the amount you want to charge.</p>
 
       <input
         type="number"
@@ -58,17 +53,9 @@ function MoneyChargePage() {
         Charge Money
       </button>
 
-      {message && (
-        <p>
-          {message}
-        </p>
-      )}
+      {message && <p>{message}</p>}
 
-      {error && (
-        <p>
-          {error}
-        </p>
-      )}
+      {error && <p>{error}</p>}
     </div>
   );
 }

@@ -8,8 +8,8 @@ import SignUpPage from "./pages/SignUpPage";
 import TournamentDetailPage from "./pages/TournamentDetailPage";
 import MyTournamentPage from "./pages/MyTournamentPage";
 import MyTournamentDetailPage from "./pages/MyTournamentDetailPage";
-import ShopManagePage from "./pages/ShopManagePage"
-import ShopTournamentPage from "./pages/ShopTournamentPage"
+import ShopManagePage from "./pages/ShopManagePage";
+import ShopTournamentPage from "./pages/ShopTournamentPage";
 import ShopTournamentDetailPage from "./pages/ShopTournamentDetailPage";
 import ShopCreateEditPage from "./pages/ShopCreateEditPage";
 import TournamentCreatePage from "./pages/TournamentCreatePage";
@@ -24,34 +24,19 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignUpPage />} />
-          <Route
-            path="/tournaments/:id"
-            element={<TournamentDetailPage />}
-          />
-          <Route
-            path="/my-tournaments"
-            element={<MyTournamentPage />}
-          />
+          <Route path="/tournaments/:id" element={<TournamentDetailPage />} />
+          <Route path="/my-tournaments" element={<MyTournamentPage />} />
           <Route
             path="/my-tournaments/:id"
             element={<MyTournamentDetailPage />}
           />
-          <Route
-            path="/shop-manage"
-            element={<ShopManagePage />}
-          />
-          <Route
-            path="/shop-tournaments"
-            element={<ShopTournamentPage />}
-          />
+          <Route path="/shop-manage" element={<ShopManagePage />} />
+          <Route path="/shop-tournaments" element={<ShopTournamentPage />} />
           <Route
             path="/shop-tournaments/:id"
             element={<ShopTournamentDetailPage />}
           />
-          <Route
-            path="/shop-createedit"
-            element={<ShopCreateEditPage />}
-          />
+          <Route path="/shop-createedit" element={<ShopCreateEditPage />} />
           <Route
             path="shop-tournaments/create"
             element={<TournamentCreatePage />}
@@ -60,10 +45,7 @@ function App() {
             path="shop-tournaments/:id/edit"
             element={<TournamentEditPage />}
           />
-          <Route
-            path="/money-charge"
-            element={<MoneyChargePage />}
-          />
+          <Route path="/money-charge" element={<MoneyChargePage />} />
         </Route>
       </Routes>
     </BrowserRouter>

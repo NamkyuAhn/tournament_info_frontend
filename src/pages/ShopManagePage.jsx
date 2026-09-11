@@ -34,7 +34,7 @@ function ShopManagePage() {
             Create Tournament
           </button>
         </Link>
-        
+
         <Link to="/shop-tournaments">
           <button
             style={{

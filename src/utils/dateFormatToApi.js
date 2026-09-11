@@ -1,13 +1,7 @@
-export function formatDateTimeToApi(
-  value
-) {
-
+export function formatDateTimeToApi(value) {
   if (!value) {
     return null;
   }
 
-
-  return new Date(value)
-    .toISOString();
-
+  return new Date(value).toISOString();
 }
